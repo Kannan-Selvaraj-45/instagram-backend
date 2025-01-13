@@ -1,14 +1,9 @@
 "use strict";
 const { Model } = require("sequelize");
+
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
-    static associate({ Post, Comment, Like }) {
-      // define association here
+    static associate({ Post, Comment, Like, authToken, HidePost }) {
       User.hasMany(Post, {
         foreignKey: "user_id",
         as: "posts",
@@ -29,8 +24,16 @@ module.exports = (sequelize, DataTypes) => {
         onDelete: "CASCADE",
         onUpdate: "CASCADE",
       });
+
+      User.hasOne(authToken, {
+        foreignKey: "user_id",
+        as: "token",
+        onDelete: "CASCADE",
+        onUpdate: "CASCADE",
+      });
     }
   }
+
   User.init(
     {
       username: {
@@ -51,7 +54,22 @@ module.exports = (sequelize, DataTypes) => {
     {
       sequelize,
       modelName: "User",
+      hooks: {
+        beforeDestroy: async (user) => {
+          const { Post, Comment, Like } = sequelize.models;
+
+          // Delete all associated posts
+          await Post.destroy({ where: { user_id: user.id }, ...options });
+
+          // Delete all associated comments
+          await Comment.destroy({ where: { user_id: user.id }, ...options });
+
+          // Delete all associated likes
+          await Like.destroy({ where: { user_id: user.id }, ...options });
+        },
+      },
     }
   );
+
   return User;
 };

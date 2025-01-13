@@ -2,22 +2,20 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable("Likes", {
+    await queryInterface.createTable("authTokens", {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      post_id: {
-        type: Sequelize.INTEGER,
-      },
       user_id: {
         type: Sequelize.INTEGER,
       },
-      count: {
-        type: Sequelize.INTEGER,
+      token: {
+        type: Sequelize.STRING,
       },
+
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
@@ -29,6 +27,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable("Likes");
+    await queryInterface.dropTable("authTokens");
   },
 };

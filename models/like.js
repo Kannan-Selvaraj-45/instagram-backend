@@ -30,6 +30,9 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
+      count: {
+        type: DataTypes.INTEGER,
+      },
     },
     {
       sequelize,
