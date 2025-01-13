@@ -322,6 +322,7 @@ const getAllPostsWithCommentsAndComments = async (req, res) => {
     }
 
     const allPosts = await Post.findAll({
+      where: { user_id: req.user.id },
       include: [
         {
           model: Comment,

@@ -25,10 +25,22 @@ module.exports = (sequelize, DataTypes) => {
       post_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
+        references: {
+          model: "Posts",
+          key: "id",
+        },
+        onDelete: "CASCADE",
+        onUpdate: "CASCADE",
       },
       user_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
+        references: {
+          model: "Users",
+          key: "id",
+        },
+        onDelete: "CASCADE",
+        onUpdate: "CASCADE",
       },
       count: {
         type: DataTypes.INTEGER,
